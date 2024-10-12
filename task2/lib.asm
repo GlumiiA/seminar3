@@ -3,7 +3,8 @@ codes:
     db      '0123456789ABCDEF'
 
 section .text
-global _start
+global exit
+global print_hex
 
 exit:                        
     mov  rax, 60           
