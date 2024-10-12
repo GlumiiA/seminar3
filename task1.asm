@@ -1,24 +1,29 @@
+section .text
+global _start
+
 %macro pushn 1
-    mov ax, 0 ; Используем ax в качестве временного регистра
-    %rep %1
-        pusha ; Сохраняем все регистры общего назначения
+    %rep %0
+        push %1
+        %rotate 1
     %endrep
 %endmacro
 
 %macro popn 1
-    %rep %1
-        popa ; Восстанавливаем все регистры общего назначения
+    %rep %0
+        pop %1
+        %rotate 1
     %endrep
 %endmacro
 section .text
 global _start
 
 _start:
-    pushn eax, ebx ; Сохраняем eax и ebx в стек
-    mov eax, 10
-    mov ebx, 20
-    popn ebx, eax ; Восстанавливаем ebx и eax из стека
+    pushn rax, rbx ;  сохранить регистры rax и rbx на стек
+    mov rax, 10
+    mov rbx, 20
+    popn rax, rbx ; Восстанавливаем ebx и eax из стека
 
-    mov eax, 1      ; syscall: exit
-    xor ebx, ebx    ; статус: 0
-    int 0x80
+    xor rbx, rbx    ; статус: 0
+    mov rax, 60        ; системный вызов для выхода
+    xor rdi, rdi       ; код возврата 0
+    syscall
